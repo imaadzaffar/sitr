@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>X Blur</title>
+    <link rel="stylesheet" href="ui.css" />
+    <style>
+      body { width: 300px; padding: 14px 16px 16px; }
+      .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 14px 0; }
+      .stat { padding: 10px; border: 1px solid var(--line); border-radius: 12px; }
+      .stat b { display: block; font-size: 22px; line-height: 1.1; }
+      .foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+      #note { margin: 8px 0 0; }
+    </style>
+  </head>
+  <body>
+    <label class="row" style="border: 0; padding: 0">
+      <h1><img src="icons/icon-48.png" alt="" />X Blur</h1>
+      <span class="switch"><input type="checkbox" id="enabled" aria-label="Blurring on" /><span></span></span>
+    </label>
+    <div class="stats" id="stats">
+      <div class="stat"><b id="checked">–</b><span class="muted small">posts checked</span></div>
+      <div class="stat"><b id="blurred">–</b><span class="muted small">posts blurred</span></div>
+      <div class="stat"><b id="media">–</b><span class="muted small">images/videos blurred</span></div>
+      <div class="stat"><b id="avatars">–</b><span class="muted small">profile pictures blurred</span></div>
+    </div>
+    <p id="note" class="small muted">Counts are for the X page in this tab.</p>
+    <div class="foot">
+      <span id="provider" class="small muted"></span>
+      <button class="secondary" id="options">Settings</button>
+    </div>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

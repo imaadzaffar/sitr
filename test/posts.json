@@ -1,0 +1,34 @@
+{
+  "feed": [
+    { "id": "launch", "name": "Ada Park", "handle": "adapark", "avatar": "avatar-a", "text": "Just shipped dark mode for our app after three weekends of fiddling with colour tokens. Feedback very welcome!", "image": "sunset", "expect": {} },
+    { "id": "harass", "name": "Bram Okafor", "handle": "bram_o", "avatar": "avatar-b", "text": "[mock harassment] You are a pathetic waste of oxygen. Log off forever, nobody would miss you.", "expect": { "text": ["hate_harassment"] } },
+    { "id": "crash", "name": "M6 Traffic Watch", "handle": "m6watch", "avatar": "avatar-c", "text": "Bad crash near junction 19 this morning. Please drive carefully out there.", "image": "gore", "expect": { "image": ["violence"] } },
+    { "id": "demo", "name": "Northwind", "handle": "northwind", "avatar": "avatar-d", "text": "Our product demo is live. Two minutes, no fluff.", "video": "poster-clean", "expect": {} },
+    { "id": "scam", "name": "Elon Giveaway Official", "handle": "elon_gift_2026", "avatar": "avatar-e", "text": "We are giving away 5,000 BTC! Send 0.1 BTC to the wallet in my bio and get 2x back instantly. Limited time only!", "expect": { "text": ["spam_scam"] } },
+    { "id": "avatar", "name": "Quiet Account", "handle": "quiet_acct", "avatar": "avatar-bad", "text": "Does anyone know a good place for ramen near King's Cross?", "expect": { "avatar": ["hate_harassment"] } },
+    { "id": "tabs", "name": "Chen Li", "handle": "chenli", "avatar": "avatar-a", "text": "Hot take: tabs are better than spaces and I will die on this hill. Fight me.", "image": "cat", "expect": {} },
+    { "id": "explicit", "name": "Promo Bot 9000", "handle": "promo9000", "avatar": "avatar-c", "text": "[mock explicit] Uncensored adult content, link in bio. 18+ only.", "image": "explicit", "expect": { "text": ["sexual"], "image": ["sexual"] } },
+    { "id": "fight", "name": "Clip Farm", "handle": "clipfarm", "avatar": "avatar-d", "text": "Watch till the end", "video": "poster-violent", "expect": { "video": ["violence"] } },
+    { "id": "panorama", "name": "Dee Hughes", "handle": "deeh", "avatar": "avatar-e", "text": "Panorama from the top of Snowdon. Worth the 5am start.", "image": "panorama", "expect": {} },
+    { "id": "slur", "name": "Angry Anon", "handle": "anon83920", "avatar": "avatar-b", "text": "[mock slur] People like you don't belong here. Go back where you came from, [redacted slur].", "expect": { "text": ["slurs", "hate_harassment"] } },
+    { "id": "error", "name": "Flaky Fiona", "handle": "flaky", "avatar": "avatar-a", "text": "This post makes the mock API fail (MOCK_SERVER_ERROR), so it must stay visible.", "expect": {} }
+  ],
+  "page2": [
+    { "id": "p2-clean", "name": "Gale Morris", "handle": "galem", "avatar": "avatar-c", "text": "Finally finished the jigsaw. 2,000 pieces, one missing. Of course.", "expect": {} },
+    { "id": "p2-selfharm", "name": "Throwaway", "handle": "thrw_991", "avatar": "avatar-d", "text": "[mock self-harm] You should just hurt yourself, honestly it is the only thing that helps.", "expect": { "text": ["self_harm"] } },
+    { "id": "p2-photo", "name": "Ada Park", "handle": "adapark", "avatar": "avatar-a", "text": "Evening walk.", "image": "sunset", "expect": {} }
+  ],
+  "thread": {
+    "focal": { "id": "focal", "name": "Ada Park", "handle": "adapark", "avatar": "avatar-a", "text": "What is everyone reading this month?", "expect": {} },
+    "replies": [
+      { "id": "reply-clean", "name": "Chen Li", "handle": "chenli", "avatar": "avatar-b", "text": "Re-reading Piranesi. Still wonderful.", "expect": {} },
+      { "id": "reply-bad", "name": "Troll", "handle": "trollface", "avatar": "avatar-e", "text": "[mock harassment] Nobody cares what you read, you absolute moron. Delete your account.", "expect": { "text": ["hate_harassment"] } }
+    ]
+  },
+  "flaggedFixtures": {
+    "gore": ["violence"],
+    "explicit": ["sexual"],
+    "poster-violent": ["violence"],
+    "avatar-bad": ["hate_harassment"]
+  }
+}

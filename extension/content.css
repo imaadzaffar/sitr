@@ -1,0 +1,131 @@
+/* X Blur: everything is absolutely positioned or a filter, so nothing shifts. */
+
+article.xb-post {
+  position: relative;
+}
+
+article.xb-hidden [data-testid='tweetText'],
+article.xb-hidden [data-testid='tweetPhoto'],
+article.xb-hidden [data-testid='videoPlayer'],
+article.xb-hidden [data-testid='card.wrapper'] {
+  filter: blur(12px) saturate(0.6);
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.15s ease;
+}
+
+.xb-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px 12px 72px;
+  pointer-events: none;
+}
+article.xb-revealed > .xb-overlay {
+  display: none;
+}
+
+.xb-card {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  padding: 8px 10px 8px 12px;
+  border-radius: 14px;
+  background: rgba(15, 20, 25, 0.88);
+  color: #fff;
+  font: 500 13px/1.3 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+}
+.xb-eye {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  background: no-repeat center / contain
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M4 20 20 4'/%3E%3C/svg%3E");
+}
+.xb-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.xb-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.xb-labels {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.xb-show,
+.xb-rehide,
+.xb-media-btn {
+  flex: none;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font: 600 12px/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+.xb-show {
+  padding: 8px 12px;
+  background: #fff;
+  color: #0f1419;
+}
+.xb-show:hover {
+  background: #e7e9ea;
+}
+
+.xb-rehide {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 44px;
+  z-index: 3;
+  padding: 5px 10px;
+  background: rgba(15, 20, 25, 0.75);
+  color: #fff;
+}
+article.xb-revealed > .xb-rehide {
+  display: block;
+}
+
+/* A flagged image or video stays blurred on its own, even after "Show anyway". */
+.xb-media-flagged {
+  position: relative;
+  overflow: hidden;
+}
+.xb-media-flagged > *:not(.xb-media-btn) {
+  filter: blur(28px);
+  pointer-events: none;
+}
+.xb-media-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  max-width: 90%;
+  padding: 7px 12px;
+  background: rgba(15, 20, 25, 0.85);
+  color: #fff;
+}
+article.xb-hidden .xb-media-btn {
+  visibility: hidden;
+}
+
+.xb-avatar-flagged {
+  overflow: hidden;
+  border-radius: 9999px;
+}
+.xb-avatar-flagged * {
+  filter: blur(7px);
+}

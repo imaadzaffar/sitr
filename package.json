@@ -1,0 +1,17 @@
+{
+  "name": "x-blur",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Chrome extension that blurs inappropriate posts, replies, images and profile pictures on X, judged by TypeSafe Jev or xAI Grok with your own API key.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/unit.test.mjs",
+    "e2e": "node test/e2e.mjs",
+    "estimate": "node scripts/estimate.mjs",
+    "build": "sh scripts/build.sh"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.64.1"
+  }
+}

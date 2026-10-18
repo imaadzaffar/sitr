@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>X Blur settings</title>
+    <link rel="stylesheet" href="ui.css" />
+    <style>
+      body { max-width: 620px; margin: 0 auto; padding: 28px 20px 60px; }
+      .providers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .provider { display: block; padding: 12px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+      .provider:has(input:checked) { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+      .provider b { display: block; }
+      .keyrow { display: flex; gap: 8px; margin-top: 6px; }
+      .keyrow input { flex: 1; }
+      .field { margin: 12px 0; }
+      .field > span { display: block; font-weight: 600; margin-bottom: 4px; }
+      .threshold { display: flex; align-items: center; gap: 12px; }
+      .threshold input { flex: 1; }
+      [hidden] { display: none !important; }
+      #saved { margin-left: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1><img src="icons/icon-48.png" alt="" />X Blur settings</h1>
+    <p class="muted">Blurs hateful, explicit, gory, self-harm and scam posts on X. Your key stays in this browser (not synced) and is only sent to the provider you pick.</p>
+
+    <h2>Classifier</h2>
+    <div class="providers">
+      <label class="provider"><input type="radio" name="provider" value="jev" /> <b>TypeSafe Jev</b><span class="small muted">Default. Calibrated yes/no per category. Images are experimental.</span></label>
+      <label class="provider"><input type="radio" name="provider" value="grok" /> <b>xAI Grok</b><span class="small muted">LLM judgement with a short reason. Vision model for images.</span></label>
+    </div>
+
+    <section id="jev-box">
+      <div class="field">
+        <span>TypeSafe API key</span>
+        <div class="keyrow">
+          <input type="password" id="typesafeKey" autocomplete="off" spellcheck="false" placeholder="Paste your key from console.typesafe.ai" />
+        </div>
+        <span class="small muted">Get one at <a href="https://console.typesafe.ai" target="_blank" rel="noopener">console.typesafe.ai</a>.</span>
+      </div>
+      <div class="field">
+        <span>Jev model</span>
+        <select id="jevModel"></select>
+      </div>
+    </section>
+
+    <section id="grok-box">
+      <div class="field">
+        <span>xAI API key</span>
+        <div class="keyrow">
+          <input type="password" id="xaiKey" autocomplete="off" spellcheck="false" placeholder="xai-…" />
+        </div>
+        <span class="small muted">Get one at <a href="https://console.x.ai" target="_blank" rel="noopener">console.x.ai</a>.</span>
+      </div>
+      <div class="field">
+        <span>Grok model</span>
+        <input type="text" id="grokModel" list="grokModels" spellcheck="false" />
+        <datalist id="grokModels"></datalist>
+        <span class="small muted">Must accept images if you check images, videos or profile pictures.</span>
+      </div>
+    </section>
+
+    <p><button id="save">Save and test</button><span id="saved" class="small status"></span></p>
+
+    <h2>Strictness</h2>
+    <div class="field threshold">
+      <input type="range" id="threshold" min="0.3" max="0.95" step="0.05" />
+      <b id="thresholdValue"></b>
+    </div>
+    <p class="small muted">A post is blurred when the model's probability for an enabled category is at least this. Lower blurs more. For Jev this is the Noul probability; for Grok it is Grok's own confidence.</p>
+
+    <h2>What to check</h2>
+    <label class="row">Post text<span class="switch"><input type="checkbox" id="checkText" /><span></span></span></label>
+    <label class="row">Post images<span class="switch"><input type="checkbox" id="checkImages" /><span></span></span></label>
+    <label class="row">Video thumbnails<span class="switch"><input type="checkbox" id="checkVideos" /><span></span></span></label>
+    <label class="row">Profile pictures<span class="switch"><input type="checkbox" id="checkAvatars" /><span></span></span></label>
+    <label class="row">Replies (on post pages)<span class="switch"><input type="checkbox" id="checkReplies" /><span></span></span></label>
+
+    <h2>Categories</h2>
+    <div id="categories"></div>
+
+    <h2>Saved verdicts</h2>
+    <p class="small muted">Each post's verdict is cached by a hash of its text (images by URL) so nothing is sent twice. Post text and images are never stored.</p>
+    <p><button class="secondary" id="clear">Clear cache</button> <span id="cacheInfo" class="small muted"></span></p>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
