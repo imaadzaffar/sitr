@@ -11,20 +11,32 @@ def font(size):
     return ImageFont.load_default()
 
 def icon(size):
+    """Sitr: a shield with a veil drawn down over its upper half."""
     s = 512
     img = Image.new("RGBA", (s, s), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
-    d.rounded_rectangle([0, 0, s - 1, s - 1], radius=112, fill=(15, 20, 25, 255))
-    # a soft blurred blob behind a crisp eye-with-slash
-    blob = Image.new("RGBA", (s, s), (0, 0, 0, 0))
-    ImageDraw.Draw(blob).ellipse([110, 150, 402, 362], fill=(29, 155, 240, 200))
-    img.alpha_composite(blob.filter(ImageFilter.GaussianBlur(38)))
-    w = 30
-    d.ellipse([196, 196, 316, 316], outline="white", width=w)
-    d.arc([86, 130, 426, 470], 200, 340, fill="white", width=w)
-    d.arc([86, 42, 426, 382], 20, 160, fill="white", width=w)
-    d.line([132, 392, 380, 120], fill=(15, 20, 25, 255), width=w + 34)
-    d.line([132, 392, 380, 120], fill="white", width=w)
+    d.rounded_rectangle([0, 0, s - 1, s - 1], radius=112, fill=(14, 46, 48, 255))
+    # shield
+    def bez(p0, p1, p2, n=24):
+        return [((1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * p1[0] + t * t * p2[0], (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * p1[1] + t * t * p2[1]) for t in (i / n for i in range(n + 1))]
+    right = bez((256, 78), (340, 120), (416, 118)) + bez((416, 118), (430, 340), (256, 452))
+    shield = right + [(512 - x, y) for x, y in reversed(right)]
+    glow = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    ImageDraw.Draw(glow).polygon(shield, fill=(56, 189, 160, 140))
+    img.alpha_composite(glow.filter(ImageFilter.GaussianBlur(26)))
+    d.polygon(shield, fill=(232, 245, 240, 255))
+    # veil: a soft drape over the top of the shield with a scalloped hem
+    veil = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    vd = ImageDraw.Draw(veil)
+    vd.polygon([(60, 60), (452, 60), (452, 236), (60, 236)], fill=(32, 150, 128, 255))
+    for cx in (136, 256, 376):
+        vd.ellipse([cx - 62, 186, cx + 62, 290], fill=(32, 150, 128, 255))
+    for x in (196, 316):  # folds between the scallops
+        vd.line([x, 70, x, 232], fill=(22, 118, 100, 255), width=12)
+    smask = Image.new("L", (s, s), 0)
+    ImageDraw.Draw(smask).polygon(shield, fill=255)
+    veil.putalpha(Image.composite(veil.getchannel("A"), Image.new("L", (s, s), 0), smask))
+    img.alpha_composite(veil)
     mask = Image.new("L", (s, s), 0)
     ImageDraw.Draw(mask).rounded_rectangle([0, 0, s - 1, s - 1], radius=112, fill=255)
     img.putalpha(Image.composite(img.getchannel("A"), mask, mask))

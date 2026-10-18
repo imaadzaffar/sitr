@@ -50,10 +50,10 @@ test('cache keys hash the normalised text and include provider and model', async
   const c = await textCacheKey('grok', 'grok-4.20-non-reasoning', 'hello world');
   assert.equal(a, b);
   assert.notEqual(a, c);
-  assert.match(a, /^t:jev:jev-1\.14\.0:[0-9a-f]{32}$/);
+  assert.match(a, /^sitr:t:jev:jev-1\.14\.0:[0-9a-f]{32}$/);
   assert.doesNotMatch(a, /hello/);
   const m = await mediaCacheKey('jev', 'jev-1.14.0', 'avatar', 'https://pbs.twimg.com/profile_images/1/a_400x400.jpg');
-  assert.match(m, /^m:jev:jev-1\.14\.0:avatar:[0-9a-f]{32}$/);
+  assert.match(m, /^sitr:m:jev:jev-1\.14\.0:avatar:[0-9a-f]{32}$/);
 });
 
 // ---------- settings + decisions ----------
@@ -113,14 +113,14 @@ test('combinePost hides on text or media but never on the avatar alone', () => {
 test('cache stores rounded scores, not text, and prunes oldest', async () => {
   const area = memoryArea();
   const cache = createCache(area, { max: 2, pruneEvery: 1 });
-  await cache.set('t:a', { scores: { violence: 0.123456 }, reason: 'r' });
+  await cache.set('sitr:t:a', { scores: { violence: 0.123456 }, reason: 'r' });
   await new Promise((r) => setTimeout(r, 2));
-  await cache.set('t:b', { scores: { violence: 0.5 } });
+  await cache.set('sitr:t:b', { scores: { violence: 0.5 } });
   await new Promise((r) => setTimeout(r, 2));
-  await cache.set('m:c', { scores: { violence: 2 } });
-  assert.equal(await cache.get('t:a'), null);
-  assert.equal((await cache.get('t:b')).scores.violence, 0.5);
-  assert.equal((await cache.get('m:c')).scores.violence, 1);
+  await cache.set('sitr:m:c', { scores: { violence: 2 } });
+  assert.equal(await cache.get('sitr:t:a'), null);
+  assert.equal((await cache.get('sitr:t:b')).scores.violence, 0.5);
+  assert.equal((await cache.get('sitr:m:c')).scores.violence, 1);
   area.data.settings = { keep: true };
   assert.equal(await cache.count(), 2);
   assert.equal(await cache.clear(), 2);

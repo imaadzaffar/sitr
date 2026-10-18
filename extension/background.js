@@ -1,4 +1,4 @@
-// Service worker. The only part of X Blur that sees API keys or talks to an API.
+// Service worker. The only part of Sitr that sees API keys or talks to an API.
 // Content scripts send post text or image URLs; they get back a blur decision.
 // Every failure "fails open": the answer is an error status and nothing is blurred.
 
@@ -90,7 +90,7 @@ async function handleError(err) {
   const status = err?.status ?? 0;
   if (status === 401 || status === 403) await setKeyState({ ok: false, status, message: err.message });
   if (status === 429 || status === 529) pausedUntil = Date.now() + 30000;
-  console.warn('[X Blur]', err?.message || err);
+  console.warn('[Sitr]', err?.message || err);
   return { status: 'error', error: err?.message || String(err), code: status };
 }
 

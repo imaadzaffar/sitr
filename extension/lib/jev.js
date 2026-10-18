@@ -117,7 +117,7 @@ export async function jevClassifyImage(apiKey, model, kind, blob, opts) {
 export async function jevTest(apiKey, model, opts) {
   const json = await askJev(
     apiKey,
-    { model, state: 'Hello from X Blur.', questions: { ok: { type: 'noul', instructions: 'Is `state` a greeting?' } } },
+    { model, state: 'Hello from Sitr.', questions: { ok: { type: 'noul', instructions: 'Is `state` a greeting?' } } },
     { retries: 0, ...opts },
   );
   return { model: json.model || model };

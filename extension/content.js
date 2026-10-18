@@ -1,4 +1,4 @@
-// X Blur content script. Finds posts on x.com / twitter.com as they scroll into
+// Sitr content script. Finds posts on x.com / twitter.com as they scroll into
 // view, asks the background worker about their text and media, and blurs what it
 // flags. It never sends usernames, handles or account details: only post text and
 // image URLs (the worker fetches the image itself).
@@ -113,7 +113,7 @@
     }
     if (!settings.checkReplies && isReply(article)) {
       if (st.parts.size) resetArticle(article);
-      article.dataset.xb = 'skipped';
+      article.dataset.sitr = 'skipped';
       return;
     }
 
@@ -151,7 +151,7 @@
     }
     if (st.parts.size) {
       stats.checked.add(st.postId);
-      article.dataset.xb = article.dataset.xb || 'checking';
+      article.dataset.sitr = article.dataset.sitr || 'checking';
     }
     if (changed) render(article);
   }
@@ -195,30 +195,30 @@
 
     if (flaggedParts.length) {
       stats.blurred.add(st.postId);
-      article.dataset.xb = 'flagged';
+      article.dataset.sitr = 'flagged';
       setPostHidden(article, st, flaggedParts.map((p) => p.result.label));
     } else {
       stats.blurred.delete(st.postId);
       removePostOverlay(article);
-      article.dataset.xb = pending ? 'checking' : parts.some((p) => p.result?.status === 'error') ? 'error' : 'clean';
+      article.dataset.sitr = pending ? 'checking' : parts.some((p) => p.result?.status === 'error') ? 'error' : 'clean';
     }
   }
 
   function setPostHidden(article, st, labels) {
-    article.classList.add('xb-post');
-    article.classList.toggle('xb-hidden', !st.revealed);
-    article.classList.toggle('xb-revealed', st.revealed);
+    article.classList.add('sitr-post');
+    article.classList.toggle('sitr-hidden', !st.revealed);
+    article.classList.toggle('sitr-revealed', st.revealed);
 
-    let overlay = article.querySelector(':scope > .xb-overlay');
+    let overlay = article.querySelector(':scope > .sitr-overlay');
     if (!overlay) {
       overlay = document.createElement('div');
-      overlay.className = 'xb-overlay';
+      overlay.className = 'sitr-overlay';
       overlay.innerHTML =
-        '<div class="xb-card" role="group" aria-label="Hidden by X Blur">' +
-        '<span class="xb-eye" aria-hidden="true"></span>' +
-        '<span class="xb-text"><span class="xb-title">Hidden by X Blur</span><span class="xb-labels"></span></span>' +
-        '<button type="button" class="xb-show">Show anyway</button></div>';
-      overlay.querySelector('.xb-show').addEventListener('click', (e) => {
+        '<div class="sitr-card" role="group" aria-label="Hidden by Sitr">' +
+        '<span class="sitr-eye" aria-hidden="true"></span>' +
+        '<span class="sitr-text"><span class="sitr-title">Hidden by Sitr</span><span class="sitr-labels"></span></span>' +
+        '<button type="button" class="sitr-show">Show anyway</button></div>';
+      overlay.querySelector('.sitr-show').addEventListener('click', (e) => {
         stop(e);
         st.revealed = true;
         render(article);
@@ -226,13 +226,13 @@
       swallowClicks(overlay);
       article.appendChild(overlay);
     }
-    overlay.querySelector('.xb-labels').textContent = labels.join(' · ');
+    overlay.querySelector('.sitr-labels').textContent = labels.join(' · ');
 
-    let rehide = article.querySelector(':scope > .xb-rehide');
+    let rehide = article.querySelector(':scope > .sitr-rehide');
     if (!rehide) {
       rehide = document.createElement('button');
       rehide.type = 'button';
-      rehide.className = 'xb-rehide';
+      rehide.className = 'sitr-rehide';
       rehide.textContent = 'Hide again';
       rehide.addEventListener('click', (e) => {
         stop(e);
@@ -246,29 +246,29 @@
   }
 
   function removePostOverlay(article) {
-    article.classList.remove('xb-post', 'xb-hidden', 'xb-revealed');
-    article.querySelector(':scope > .xb-overlay')?.remove();
-    article.querySelector(':scope > .xb-rehide')?.remove();
+    article.classList.remove('sitr-post', 'sitr-hidden', 'sitr-revealed');
+    article.querySelector(':scope > .sitr-overlay')?.remove();
+    article.querySelector(':scope > .sitr-rehide')?.remove();
   }
 
   function setMediaBlur(part, flagged) {
     const el = part.el;
     if (!flagged) {
-      if (el.classList.contains('xb-media-flagged')) clearPart(part);
+      if (el.classList.contains('sitr-media-flagged')) clearPart(part);
       return;
     }
     stats.media.add(part.url);
-    if (el.classList.contains('xb-media-flagged') || el.classList.contains('xb-media-shown')) return;
-    el.classList.add('xb-media-flagged');
-    el.dataset.xbLabel = part.result.label;
+    if (el.classList.contains('sitr-media-flagged') || el.classList.contains('sitr-media-shown')) return;
+    el.classList.add('sitr-media-flagged');
+    el.dataset.sitrLabel = part.result.label;
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'xb-media-btn';
+    btn.className = 'sitr-media-btn';
     btn.textContent = `${part.result.label} · Show`;
     btn.addEventListener('click', (e) => {
       stop(e);
-      el.classList.remove('xb-media-flagged');
-      el.classList.add('xb-media-shown');
+      el.classList.remove('sitr-media-flagged');
+      el.classList.add('sitr-media-shown');
       btn.remove();
     });
     swallowClicks(btn);
@@ -279,17 +279,17 @@
     const el = part.el;
     if (flagged) {
       stats.avatars.add(part.url);
-      el.classList.add('xb-avatar-flagged');
+      el.classList.add('sitr-avatar-flagged');
       el.title = part.result.label;
-    } else if (el.classList.contains('xb-avatar-flagged')) clearPart(part);
+    } else if (el.classList.contains('sitr-avatar-flagged')) clearPart(part);
   }
 
   function clearPart(part) {
     const el = part.el;
     if (!el) return;
-    el.classList.remove('xb-media-flagged', 'xb-media-shown', 'xb-avatar-flagged');
-    el.querySelector(':scope > .xb-media-btn')?.remove();
-    delete el.dataset.xbLabel;
+    el.classList.remove('sitr-media-flagged', 'sitr-media-shown', 'sitr-avatar-flagged');
+    el.querySelector(':scope > .sitr-media-btn')?.remove();
+    delete el.dataset.sitrLabel;
     if (part.kind === 'avatar') el.removeAttribute('title');
   }
 
@@ -301,7 +301,7 @@
       st.revealed = false;
     }
     removePostOverlay(article);
-    delete article.dataset.xb;
+    delete article.dataset.sitr;
   }
 
   function stop(e) {
@@ -372,7 +372,7 @@
         for (const node of rec.addedNodes) if (node.nodeType === 1) observeAll(node);
       }
       const target = rec.target.nodeType === 1 ? rec.target : rec.target.parentElement;
-      if (target && !target.closest('.xb-overlay, .xb-media-btn, .xb-rehide')) {
+      if (target && !target.closest('.sitr-overlay, .sitr-media-btn, .sitr-rehide')) {
         const article = target.closest(SELECTORS.tweet);
         if (article) markDirty(article);
       }

@@ -1,4 +1,4 @@
-// The categories X Blur can flag, and the settings everything else starts from.
+// The categories Sitr can flag, and the settings everything else starts from.
 // Shared by the background worker, the options page, the popup and the tests.
 
 export const CATEGORIES = [

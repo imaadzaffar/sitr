@@ -22,7 +22,7 @@ export function createCache(area, { max = 5000, pruneEvery = 50 } = {}) {
 
   async function entries() {
     const all = await area.get(null);
-    return Object.entries(all || {}).filter(([k]) => k.startsWith('t:') || k.startsWith('m:'));
+    return Object.entries(all || {}).filter(([k]) => k.startsWith('sitr:t:') || k.startsWith('sitr:m:'));
   }
 
   async function prune() {

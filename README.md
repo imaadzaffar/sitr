@@ -1,4 +1,6 @@
-# X Blur
+# Sitr
+
+*Sitr* (ستر) is Arabic for "veil" or "cover". It echoes the Islamic idea of covering what shouldn't be exposed.
 
 A Chrome extension that blurs inappropriate posts, replies, images, video thumbnails and profile pictures on X (x.com and twitter.com). Each post is judged by a classifier you choose, using your own API key:
 
@@ -9,7 +11,7 @@ Flagged posts get blurred with a small label naming what was flagged (for exampl
 
 ![Mock X feed with three posts blurred and a flagged profile picture](docs/screenshot.png)
 
-Inspired by [in-other-words](https://github.com/og2701/in-other-words), which does something similar for LinkedIn. X Blur is its own code with the same overall shape.
+Inspired by [in-other-words](https://github.com/og2701/in-other-words), which does something similar for LinkedIn. Sitr is its own code with the same overall shape.
 
 ## Categories
 
@@ -26,9 +28,9 @@ Each category can be switched off in the settings.
 
 ## Install (load unpacked)
 
-1. Download or clone this repo, or unzip `release/x-blur-v*.zip`.
+1. Clone [imaadzaffar/sitr](https://github.com/imaadzaffar/sitr) (`git clone https://github.com/imaadzaffar/sitr.git`), or download and unzip `release/sitr-v*.zip` from the repo.
 2. Open `chrome://extensions` and turn on **Developer mode**.
-3. Click **Load unpacked** and pick the `extension/` folder (or the unzipped `x-blur-v*` folder).
+3. Click **Load unpacked** and pick the `extension/` folder (or the unzipped `sitr-v*` folder).
 4. The settings page opens. Paste a key, click **Save and test**, then open x.com.
 
 No build step and no dependencies. Plain JavaScript, Manifest V3, Chrome 116 or newer.
@@ -38,7 +40,7 @@ No build step and no dependencies. Plain JavaScript, Manifest V3, Chrome 116 or 
 - **TypeSafe (default):** sign up at [console.typesafe.ai](https://console.typesafe.ai) and create an API key. The default model is `jev-1.14.0`. You can also pick `jev-latest`, `jev-preview` or `jev-1.13.0`.
 - **xAI Grok:** create a key at [console.x.ai](https://console.x.ai). The default model is `grok-4.20-non-reasoning` (fast, accepts images, supports structured output). You can type any other model name, but it needs to accept images if you check media.
 
-**Images are experimental on Jev.** TypeSafe calls image input "dreamer-ready" (since 14 Oct 2026). X Blur sends the `TypeSafe-Danger-Zone-Images: true` header, and the request format or accuracy may change. TypeSafe says Jev is weaker on images than on text, so X Blur asks one simple yes/no question per category rather than a single broad one. If image results are poor, turn images off or switch to Grok for media.
+**Images are experimental on Jev.** TypeSafe calls image input "dreamer-ready" (since 14 Oct 2026). Sitr sends the `TypeSafe-Danger-Zone-Images: true` header, and the request format or accuracy may change. TypeSafe says Jev is weaker on images than on text, so Sitr asks one simple yes/no question per category rather than a single broad one. If image results are poor, turn images off or switch to Grok for media.
 
 ## Settings
 
@@ -114,7 +116,7 @@ npx playwright-core install chromium
 npm test                 # unit tests (node:test)
 npm run e2e              # loads the extension in Chromium against a mock X feed
 npm run estimate         # cost estimate from request sizes
-npm run build            # release/x-blur-v<version>.zip (+ .sha256)
+npm run build            # release/sitr-v<version>.zip (+ .sha256)
 python3 scripts/make-art.py   # redraw icons and test images
 ```
 

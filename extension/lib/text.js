@@ -20,9 +20,9 @@ export async function sha256(input) {
 }
 
 export async function textCacheKey(provider, model, text) {
-  return `t:${provider}:${model}:${(await sha256(normalise(text))).slice(0, 32)}`;
+  return `sitr:t:${provider}:${model}:${(await sha256(normalise(text))).slice(0, 32)}`;
 }
 
 export async function mediaCacheKey(provider, model, kind, url) {
-  return `m:${provider}:${model}:${kind}:${(await sha256(url)).slice(0, 32)}`;
+  return `sitr:m:${provider}:${model}:${kind}:${(await sha256(url)).slice(0, 32)}`;
 }

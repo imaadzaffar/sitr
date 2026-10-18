@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "X Blur",
+  "name": "Sitr",
   "version": "0.1.0",
-  "description": "Blurs hateful, explicit, gory, self-harm and scam posts, replies, images and profile pictures on X. Judged by TypeSafe Jev or Grok with your own API key.",
+  "description": "Sitr (ستر, 'veil') blurs hateful, explicit, gory, self-harm and scam posts and images on X, judged by Jev or Grok with your key.",
   "minimum_chrome_version": "116",
   "permissions": ["storage"],
   "host_permissions": ["https://api.typesafe.ai/*", "https://api.x.ai/*", "https://pbs.twimg.com/*"],
@@ -19,7 +19,7 @@
     }
   ],
   "action": {
-    "default_title": "X Blur",
+    "default_title": "Sitr",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon-16.png",

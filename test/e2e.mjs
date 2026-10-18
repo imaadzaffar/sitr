@@ -115,13 +115,13 @@ async function articleState(page, id) {
     const media = a.querySelector('[data-testid="tweetPhoto"], [data-testid="videoPlayer"]');
     const avatar = a.querySelector('[data-testid="Tweet-User-Avatar"]');
     return {
-      xb: a.dataset.xb || '',
-      hidden: a.classList.contains('xb-hidden'),
-      revealed: a.classList.contains('xb-revealed'),
+      status: a.dataset.sitr || '',
+      hidden: a.classList.contains('sitr-hidden'),
+      revealed: a.classList.contains('sitr-revealed'),
       textFilter: getComputedStyle(text).filter,
-      labels: a.querySelector('.xb-labels')?.textContent || '',
-      mediaFlagged: media?.classList.contains('xb-media-flagged') || false,
-      avatarFlagged: avatar?.classList.contains('xb-avatar-flagged') || false,
+      labels: a.querySelector('.sitr-labels')?.textContent || '',
+      mediaFlagged: media?.classList.contains('sitr-media-flagged') || false,
+      avatarFlagged: avatar?.classList.contains('sitr-avatar-flagged') || false,
     };
   }, id);
 }
@@ -132,7 +132,7 @@ async function settle(page, ids, timeout = 15000) {
       (ids) =>
         ids.every((id) => {
           const a = document.querySelector(`article[data-mock="${id}"]`);
-          return a && ['clean', 'flagged', 'error', 'skipped'].includes(a.dataset.xb);
+          return a && ['clean', 'flagged', 'error', 'skipped'].includes(a.dataset.sitr);
         }),
       ids,
       { timeout },
@@ -148,13 +148,13 @@ async function assertPost(page, post, provider) {
   const e = post.expect;
   const postFlagged = Boolean(e.text?.length || e.image?.length || e.video?.length);
   if (postFlagged) {
-    check(s.xb === 'flagged' && s.hidden && s.textFilter.includes('blur'), `[${provider}] ${post.id}: post blurred`);
+    check(s.status === 'flagged' && s.hidden && s.textFilter.includes('blur'), `[${provider}] ${post.id}: post blurred`);
     for (const kind of ['text', 'image', 'video']) {
       for (const cat of e[kind] || []) check(s.labels.includes(KIND_NAME[kind]) && s.labels.includes(LABELS[cat]), `[${provider}] ${post.id}: label names ${KIND_NAME[kind]}: ${LABELS[cat]} ("${s.labels}")`);
     }
   } else {
     const ok = !s.hidden && s.textFilter === 'none' && !s.labels;
-    check(ok && (s.xb === 'clean' || (post.id === 'error' && s.xb === 'error')), `[${provider}] ${post.id}: left untouched (${s.xb})`);
+    check(ok && (s.status === 'clean' || (post.id === 'error' && s.status === 'error')), `[${provider}] ${post.id}: left untouched (${s.status})`);
   }
   if (e.image?.length || e.video?.length) check(s.mediaFlagged, `[${provider}] ${post.id}: media blurred on its own`);
   else if (post.image || post.video) check(!s.mediaFlagged, `[${provider}] ${post.id}: clean media not blurred`);
@@ -188,7 +188,7 @@ async function run(provider) {
   console.log(`\n${provider === 'jev' ? 'TypeSafe Jev' : 'xAI Grok'} (mocked)`);
   const stats = { jevText: 0, jevImage: 0, grokText: 0, grokImage: 0, grokBatchSizes: [], problems: [] };
   const mocks = makeMocks(stats);
-  const profile = await mkdtemp(path.join(os.tmpdir(), 'xblur-profile-'));
+  const profile = await mkdtemp(path.join(os.tmpdir(), 'sitr-profile-'));
   const context = await chromium.launchPersistentContext(profile, {
     channel: 'chromium',
     headless: !HEADED,
@@ -253,22 +253,22 @@ async function run(provider) {
       });
       await page.screenshot({ path: path.join(OUT, 'feed.png'), fullPage: true, clip });
       await copyFile(path.join(OUT, 'feed.png'), path.join(root, 'docs', 'screenshot.png'));
-      await copyFile(path.join(OUT, 'feed.png'), '/workspace/x-blur-screenshot.png').catch(() => {});
+      await copyFile(path.join(OUT, 'feed.png'), '/workspace/sitr-screenshot.png').catch(() => {});
     }
     if (provider === 'jev') {
       // Show anyway / hide again.
-      await page.click('article[data-mock="harass"] .xb-show');
+      await page.click('article[data-mock="harass"] .sitr-show');
       let s = await articleState(page, 'harass');
       check(s.revealed && !s.hidden && s.textFilter === 'none', '[jev] "Show anyway" reveals the post');
-      await page.click('article[data-mock="harass"] .xb-rehide');
+      await page.click('article[data-mock="harass"] .sitr-rehide');
       s = await articleState(page, 'harass');
       check(s.hidden && s.textFilter.includes('blur'), '[jev] "Hide again" re-hides it');
       check(page.url() === 'https://x.com/home', '[jev] clicking our buttons did not open the post');
 
-      await page.click('article[data-mock="crash"] .xb-show');
+      await page.click('article[data-mock="crash"] .sitr-show');
       s = await articleState(page, 'crash');
       check(s.revealed && s.mediaFlagged, '[jev] revealing the post keeps the flagged image blurred');
-      await page.click('article[data-mock="crash"] .xb-media-btn');
+      await page.click('article[data-mock="crash"] .sitr-media-btn');
       s = await articleState(page, 'crash');
       check(!s.mediaFlagged, '[jev] the image can be shown on its own');
 
@@ -300,9 +300,9 @@ async function run(provider) {
       const { settings } = await chrome.storage.local.get('settings');
       await chrome.storage.local.set({ settings: { ...settings, checkReplies: false } });
     });
-    await page.waitForFunction(() => document.querySelector('article[data-mock="reply-bad"]')?.dataset.xb === 'skipped', null, { timeout: 5000 }).catch(() => {});
+    await page.waitForFunction(() => document.querySelector('article[data-mock="reply-bad"]')?.dataset.sitr === 'skipped', null, { timeout: 5000 }).catch(() => {});
     const r = await articleState(page, 'reply-bad');
-    check(r.xb === 'skipped' && !r.hidden, `[${provider}] with replies off, replies are left alone`);
+    check(r.status === 'skipped' && !r.hidden, `[${provider}] with replies off, replies are left alone`);
 
     // Turning the extension off unblurs everything.
     await page.evaluate(() => window.goHome());
@@ -312,7 +312,7 @@ async function run(provider) {
       await chrome.storage.local.set({ settings: { ...settings, enabled: false } });
     });
     await page.waitForTimeout(800);
-    check((await page.$$('article.xb-hidden, .xb-media-flagged, .xb-avatar-flagged')).length === 0, `[${provider}] turning it off removes every blur`);
+    check((await page.$$('article.sitr-hidden, .sitr-media-flagged, .sitr-avatar-flagged')).length === 0, `[${provider}] turning it off removes every blur`);
 
     // Options page: Save and test against the mocked API.
     const options = await context.newPage();

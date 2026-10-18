@@ -1,5 +1,5 @@
 {
-  "name": "x-blur",
+  "name": "sitr",
   "version": "0.1.0",
   "private": true,
   "description": "Chrome extension that blurs inappropriate posts, replies, images and profile pictures on X, judged by TypeSafe Jev or xAI Grok with your own API key.",

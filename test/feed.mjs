@@ -51,7 +51,7 @@ export function feedHtml(data) {
 <body><div class="shell">
   <nav><div class="logo">𝕏</div><div>⌂ Home</div><div>⌕ Explore</div><div>🔔 Notifications</div><div>✉ Messages</div></nav>
   <main><header id="title">Home</header><div id="timeline"></div></main>
-  <aside><div class="box">What's happening<br><br>Mock feed for X Blur's end-to-end test.</div></aside>
+  <aside><div class="box">What's happening<br><br>Mock feed for Sitr's end-to-end test.</div></aside>
 </div>
 <script>
 const DATA = ${JSON.stringify(data).replace(/</g, '\\u003c')};

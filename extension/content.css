@@ -1,20 +1,20 @@
-/* X Blur: everything is absolutely positioned or a filter, so nothing shifts. */
+/* Sitr: everything is absolutely positioned or a filter, so nothing shifts. */
 
-article.xb-post {
+article.sitr-post {
   position: relative;
 }
 
-article.xb-hidden [data-testid='tweetText'],
-article.xb-hidden [data-testid='tweetPhoto'],
-article.xb-hidden [data-testid='videoPlayer'],
-article.xb-hidden [data-testid='card.wrapper'] {
+article.sitr-hidden [data-testid='tweetText'],
+article.sitr-hidden [data-testid='tweetPhoto'],
+article.sitr-hidden [data-testid='videoPlayer'],
+article.sitr-hidden [data-testid='card.wrapper'] {
   filter: blur(12px) saturate(0.6);
   pointer-events: none;
   user-select: none;
   transition: filter 0.15s ease;
 }
 
-.xb-overlay {
+.sitr-overlay {
   position: absolute;
   inset: 0;
   z-index: 3;
@@ -24,11 +24,11 @@ article.xb-hidden [data-testid='card.wrapper'] {
   padding: 12px 16px 12px 72px;
   pointer-events: none;
 }
-article.xb-revealed > .xb-overlay {
+article.sitr-revealed > .sitr-overlay {
   display: none;
 }
 
-.xb-card {
+.sitr-card {
   pointer-events: auto;
   display: flex;
   align-items: center;
@@ -42,49 +42,49 @@ article.xb-revealed > .xb-overlay {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(2px);
 }
-.xb-eye {
+.sitr-eye {
   flex: none;
   width: 18px;
   height: 18px;
   background: no-repeat center / contain
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M4 20 20 4'/%3E%3C/svg%3E");
 }
-.xb-text {
+.sitr-text {
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
-.xb-title {
+.sitr-title {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   opacity: 0.7;
 }
-.xb-labels {
+.sitr-labels {
   font-weight: 600;
   overflow-wrap: anywhere;
 }
 
-.xb-show,
-.xb-rehide,
-.xb-media-btn {
+.sitr-show,
+.sitr-rehide,
+.sitr-media-btn {
   flex: none;
   border: 0;
   border-radius: 999px;
   cursor: pointer;
   font: 600 12px/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
-.xb-show {
+.sitr-show {
   padding: 8px 12px;
   background: #fff;
   color: #0f1419;
 }
-.xb-show:hover {
+.sitr-show:hover {
   background: #e7e9ea;
 }
 
-.xb-rehide {
+.sitr-rehide {
   display: none;
   position: absolute;
   top: 8px;
@@ -94,20 +94,20 @@ article.xb-revealed > .xb-overlay {
   background: rgba(15, 20, 25, 0.75);
   color: #fff;
 }
-article.xb-revealed > .xb-rehide {
+article.sitr-revealed > .sitr-rehide {
   display: block;
 }
 
 /* A flagged image or video stays blurred on its own, even after "Show anyway". */
-.xb-media-flagged {
+.sitr-media-flagged {
   position: relative;
   overflow: hidden;
 }
-.xb-media-flagged > *:not(.xb-media-btn) {
+.sitr-media-flagged > *:not(.sitr-media-btn) {
   filter: blur(28px);
   pointer-events: none;
 }
-.xb-media-btn {
+.sitr-media-btn {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -118,14 +118,14 @@ article.xb-revealed > .xb-rehide {
   background: rgba(15, 20, 25, 0.85);
   color: #fff;
 }
-article.xb-hidden .xb-media-btn {
+article.sitr-hidden .sitr-media-btn {
   visibility: hidden;
 }
 
-.xb-avatar-flagged {
+.sitr-avatar-flagged {
   overflow: hidden;
   border-radius: 9999px;
 }
-.xb-avatar-flagged * {
+.sitr-avatar-flagged * {
   filter: blur(7px);
 }
